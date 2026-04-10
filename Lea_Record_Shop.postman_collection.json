@@ -1,0 +1,559 @@
+{
+  "info": {
+    "name": "Lea Record Shop",
+    "description": "API collection for Lea Record Shop e-commerce backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "discId",
+      "value": ""
+    },
+    {
+      "key": "customerId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Discos",
+      "item": [
+        {
+          "name": "1. Criar Disco",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('discId', jsonData.id);",
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Disco criado com id', function () {",
+                  "    pm.expect(jsonData.id).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"We are Reactive\",\n  \"artist\": \"Hohpe\",\n  \"releaseYear\": 2026,\n  \"style\": \"Indie\",\n  \"quantity\": 500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/discs",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs"]
+            }
+          }
+        },
+        {
+          "name": "2. Listar Discos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/discs",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs"]
+            }
+          }
+        },
+        {
+          "name": "3. Listar Discos com Filtros",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/discs?style=Indie&artist=Hohpe&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs"],
+              "query": [
+                { "key": "style", "value": "Indie" },
+                { "key": "artist", "value": "Hohpe" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. Buscar Disco por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/discs/{{discId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs", "{{discId}}"]
+            }
+          }
+        },
+        {
+          "name": "5. Estoque em Tempo Real (Redis)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/discs/{{discId}}/stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs", "{{discId}}", "stock"]
+            }
+          }
+        },
+        {
+          "name": "6. Atualizar Disco",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"We are Reactive - Deluxe Edition\",\n  \"quantity\": 1000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/discs/{{discId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs", "{{discId}}"]
+            }
+          }
+        },
+        {
+          "name": "7. Remover Disco",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/discs/{{discId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs", "{{discId}}"]
+            }
+          }
+        },
+        {
+          "name": "Criar Disco - Rock",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('discId', jsonData.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Back in Black\",\n  \"artist\": \"AC/DC\",\n  \"releaseYear\": 1980,\n  \"style\": \"Rock\",\n  \"quantity\": 200\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/discs",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs"]
+            }
+          }
+        },
+        {
+          "name": "Criar Disco - MPB",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acabou Chorare\",\n  \"artist\": \"Novos Baianos\",\n  \"releaseYear\": 1972,\n  \"style\": \"MPB\",\n  \"quantity\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/discs",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "1. Cadastrar Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('customerId', jsonData.id);",
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Cliente criado com id', function () {",
+                  "    pm.expect(jsonData.id).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document\": \"12345678901\",\n  \"fullName\": \"Maria Silva\",\n  \"birthDate\": \"1990-05-20\",\n  \"email\": \"maria@email.com\",\n  \"phone\": \"11999999999\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            }
+          }
+        },
+        {
+          "name": "2. Buscar Cliente por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "3. Atualizar Cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Maria Santos Silva\",\n  \"phone\": \"11988888888\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "4. Inativar Cliente",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}/inactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}", "inactivate"]
+            }
+          }
+        },
+        {
+          "name": "5. Reativar Cliente",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}", "activate"]
+            }
+          }
+        },
+        {
+          "name": "Cadastrar Segundo Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('customerId', jsonData.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document\": \"98765432100\",\n  \"fullName\": \"Joao Santos\",\n  \"birthDate\": \"1985-11-10\",\n  \"email\": \"joao@email.com\",\n  \"phone\": \"21988887777\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "1. Criar Pedido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('orderId', jsonData.orderId);",
+                  "pm.test('Status 202 Accepted', function () {",
+                  "    pm.response.to.have.status(202);",
+                  "});",
+                  "pm.test('Pedido com status PENDING', function () {",
+                  "    pm.expect(jsonData.status).to.eql('PENDING');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"items\": [\n    {\n      \"discId\": \"{{discId}}\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "2. Buscar Pedido por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            }
+          }
+        },
+        {
+          "name": "3. Listar Pedidos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "4. Listar Pedidos por Cliente",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders?customerId={{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"],
+              "query": [
+                { "key": "customerId", "value": "{{customerId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Listar Pedidos por Periodo",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders?startDate=2026-01-01&endDate=2026-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"],
+              "query": [
+                { "key": "startDate", "value": "2026-01-01" },
+                { "key": "endDate", "value": "2026-12-31" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Verificar Estoque apos Pedido",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/discs/{{discId}}/stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["discs", "{{discId}}", "stock"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cenarios de Teste",
+      "item": [
+        {
+          "name": "Erro - Cliente inativo tenta comprar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 Bad Request', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"items\": [\n    {\n      \"discId\": \"{{discId}}\",\n      \"quantity\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Primeiro inative o cliente com PATCH /customers/{id}/inactivate, depois rode este request. Deve retornar 400."
+          }
+        },
+        {
+          "name": "Erro - Documento duplicado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409 Conflict', function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document\": \"12345678901\",\n  \"fullName\": \"Outro Nome\",\n  \"birthDate\": \"1995-03-10\",\n  \"email\": \"outro@email.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            },
+            "description": "Tenta cadastrar com o mesmo documento do primeiro cliente. Deve retornar 409 Conflict."
+          }
+        },
+        {
+          "name": "Erro - Estoque insuficiente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409 Conflict', function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"items\": [\n    {\n      \"discId\": \"{{discId}}\",\n      \"quantity\": 999999\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Tenta comprar mais discos do que o estoque. Deve retornar 409 Conflict."
+          }
+        }
+      ]
+    }
+  ]
+}
